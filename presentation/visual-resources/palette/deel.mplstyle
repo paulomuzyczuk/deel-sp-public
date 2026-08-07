@@ -1,0 +1,56 @@
+# Deel-branded matplotlib style. Minimal ink, warm latte surface, brand hues.
+# Use with:  plt.style.use("visual-resources/palette/deel.mplstyle")
+# Colour order matches CATEGORICAL in deel_palette.py (fixed order, not cycled).
+
+figure.facecolor      : FFFBF4
+axes.facecolor        : FFFBF4
+savefig.facecolor     : FFFBF4
+savefig.bbox          : tight
+savefig.dpi           : 200
+figure.figsize        : 10, 5.6
+
+font.family           : sans-serif
+# "Inter 28pt" is the literal registered family name of the installed static
+# Inter files (Google Fonts ships Inter as optical-size subfamilies). Plain
+# "Inter" does NOT resolve unless the variable font is also installed.
+font.sans-serif       : Inter 28pt, Helvetica Neue, Arial, DejaVu Sans
+font.size             : 11
+text.color            : 141414
+
+axes.prop_cycle       : cycler('color', ['5938B7', '2187CF', 'C98A00', 'A98DF6', '15740F'])
+axes.edgecolor        : 1B1B1B
+axes.linewidth        : 0.8
+axes.labelcolor       : 404040
+axes.labelsize        : 11
+axes.titlesize        : 15
+axes.titleweight      : bold
+axes.titlecolor       : 141414
+axes.titlelocation    : left
+axes.titlepad         : 14
+axes.spines.top       : False
+axes.spines.right     : False
+axes.spines.left      : False
+axes.grid             : True
+axes.grid.axis        : y
+
+grid.color            : CFCFCF
+grid.linewidth        : 0.6
+grid.alpha            : 0.7
+
+xtick.color           : 404040
+ytick.color           : 404040
+xtick.labelsize       : 10
+ytick.labelsize       : 10
+xtick.direction       : out
+ytick.direction       : out
+ytick.left            : False
+xtick.major.size      : 3
+ytick.major.size      : 0
+
+lines.linewidth       : 2.0
+lines.markersize      : 5
+lines.solid_capstyle  : round
+
+legend.frameon        : False
+legend.fontsize       : 10
+legend.labelcolor     : 404040

@@ -1,0 +1,29 @@
+======================================================================
+CLEANING REPORT — clean.py
+======================================================================
+Rows in (raw):  11952
+Headers normalized (\xa0 / whitespace): 2 of 11
+$ Cost values parsed to float: 11952
+
+Programs with >1 team value in raw data: ['regional', 'website']
+  regional: {'regional': 731, 'lifecycle': 13} -> canonical team 'regional' (minority rows all-zero: True, all duplicate keys: True)
+  website: {'website': 731, 'lifecycle': 13} -> canonical team 'website' (minority rows all-zero: True, all duplicate keys: True)
+
+Duplicate (date, program) keys: 26 (52 rows involved)
+  Programs affected: ['regional', 'website']
+  Date range of duplicates: 2025-06-18 .. 2025-06-30
+  Non-zero rows per duplicate key (safety check):
+    26 keys with 1 non-zero row(s)
+  Rows collapsed by sum-aggregation: 26
+
+Flagged clicks > impressions: 35 rows (programs: ['abm', 'paid_awareness', 'paid_sponsorship'])
+Flagged excluded (ooh, paid_other — zero cost & outcomes): 961 rows
+
+Assertions passed: unique (date, program) keys; all metrics >= 0; prospects/mqp/demo/impressions/clicks integral.
+
+Rows out (clean): 11926
+Programs: 17  Teams: 7
+Date coverage: 2023-07-01 .. 2025-06-30
+Fiscal years: {'FY24': 6046, 'FY25': 5880}
+
+Wrote data-cleaning/output/clean_daily.csv

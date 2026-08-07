@@ -1,0 +1,88 @@
+====================================================================================================
+AUDIT — documented dataset facts (ASSUMPTIONS.md) vs raw CSV
+====================================================================================================
+[PASS] Headers contain \xa0 in MQP and SQO columns
+       observed: \xa0 found in: ['#<NBSP>Marketing Qualified Prospects', '#<NBSP>Sales Qualified Opportunities']
+[PASS] $ Cost is a string with '$' and thousand separators, parseable to float
+       observed: all values contain '$': True; some contain ',': True; all parsed OK
+[PASS] Daily panel 2023-07-01 .. 2025-06-30 (two full Jul–Jun years)
+       observed: range 2023-07-01..2025-06-30, 731/731 calendar days present
+[PASS] 17 programs across 7 teams (paid, content, website, lifecycle, social, regional, event)
+       observed: 17 programs, 7 teams: ['content', 'event', 'lifecycle', 'paid', 'regional', 'social', 'website']
+[PASS] 52 duplicate (date, program) rows in regional & website, late June 2025, one-real+one-zero
+       observed: 52 rows / 26 keys; programs ['regional', 'website']; 100% of dup rows in June 2025; max non-zero rows per key = 1; dates [datetime.date(2025, 6, 18), datetime.date(2025, 6, 19), datetime.date(2025, 6, 20), datetime.date(2025, 6, 21), datetime.date(2025, 6, 22)]..
+[PASS] 35 rows with clicks > impressions, in abm / paid_sponsorship / paid_awareness
+       observed: 35 rows; programs ['abm', 'paid_awareness', 'paid_sponsorship']
+[PASS] Decimal (fractional) values present in SQO and Won (MTA)
+       observed: 974 rows with fractional SQO, 419 with fractional Won
+[PASS] Stage inversions: MQP>Prospects ~13%, Demo>MQP ~29%, Won>SQO ~6% of rows
+       observed: MQP>Prospects 13.4%, Demo>MQP 29.1%, Won>SQO 5.7%
+[PASS] ooh & paid_other: zero cost and zero outcomes across the period
+       observed: 961 rows across ooh/paid_other; sum of all metrics = 0.0
+[PASS] paid_awareness & paid_sponsorship flighted (~200–290 active days)
+       observed: paid_awareness: {'days with cost>0': 292, 'days with any activity': 301, 'days present': 731}; paid_sponsorship: {'days with cost>0': 259, 'days with any activity': 586, 'days present': 731}
+[PASS] Only paid programs carry impressions/clicks
+       observed: non-paid rows with impressions/clicks: 0; paid programs with impressions: ['abm', 'listicle_leadbuy_listing', 'paid_awareness', 'paid_brand_search', 'paid_search', 'paid_social', 'paid_sponsorship']
+
+11/11 facts PASS, 0 FAIL
+
+====================================================================================================
+PROFILING — checks NOT covered by the documented facts
+====================================================================================================
+
+0. Program->team label consistency: INCONSISTENT -> {'regional': {'regional': 731, 'lifecycle': 13}, 'website': {'website': 731, 'lifecycle': 13}}
+   regional: minority team 'lifecycle' rows are all-zero: True; dates 2025-06-18..2025-06-30
+   website: minority team 'lifecycle' rows are all-zero: True; dates 2025-06-18..2025-06-30
+1. Null values: total 0
+2. Negative values: none
+3. Date coverage per program (days present of 731):
+   ooh                                  243  2023-08-30..2025-06-17  <-- 488 missing days
+   paid_other                           718  2023-07-01..2025-06-17  <-- 13 missing days
+   social                               731  2023-07-01..2025-06-30
+   regional                             731  2023-07-01..2025-06-30
+   prospect_email                       731  2023-07-01..2025-06-30
+   paid_sponsorship                     731  2023-07-01..2025-06-30
+   paid_social                          731  2023-07-01..2025-06-30
+   paid_search                          731  2023-07-01..2025-06-30
+   abm                                  731  2023-07-01..2025-06-30
+   paid_brand_search                    731  2023-07-01..2025-06-30
+   paid_awareness                       731  2023-07-01..2025-06-30
+   listicle_leadbuy_listing             731  2023-07-01..2025-06-30
+   event                                731  2023-07-01..2025-06-30
+   customer_braze_communications        731  2023-07-01..2025-06-30
+   content                              731  2023-07-01..2025-06-30
+   webinar                              731  2023-07-01..2025-06-30
+   website                              731  2023-07-01..2025-06-30
+4. Outlier days (daily value > 10x program's non-zero median, min 30 non-zero days):
+   847 program-metric-day outliers:
+   paid_sponsorship             clicks       2025-03-01  value=   296,928.0  nonzero-median=263.5  (1127x)
+   event                        mqp          2024-07-08  value=     8,610.0  nonzero-median=9.0  (957x)
+   event                        mqp          2024-05-08  value=     4,922.0  nonzero-median=9.0  (547x)
+   event                        mqp          2024-06-16  value=     4,104.0  nonzero-median=9.0  (456x)
+   event                        mqp          2024-05-16  value=     3,705.0  nonzero-median=9.0  (412x)
+   webinar                      prospects    2024-09-23  value=     1,592.0  nonzero-median=4.0  (398x)
+   event                        prospects    2024-07-18  value=    11,184.0  nonzero-median=36.0  (311x)
+   event                        prospects    2024-11-08  value=    10,899.0  nonzero-median=36.0  (303x)
+   event                        mqp          2024-04-13  value=     2,658.0  nonzero-median=9.0  (295x)
+   paid_sponsorship             clicks       2025-04-01  value=    71,901.0  nonzero-median=263.5  (273x)
+   event                        prospects    2025-02-21  value=     9,789.0  nonzero-median=36.0  (272x)
+   event                        mqp          2024-06-28  value=     2,430.0  nonzero-median=9.0  (270x)
+   website                      mqp          2024-02-26  value=     7,954.0  nonzero-median=30.0  (265x)
+   abm                          clicks       2025-03-02  value=   218,301.0  nonzero-median=828.0  (264x)
+   paid_sponsorship             clicks       2025-02-01  value=    63,294.0  nonzero-median=263.5  (240x)
+   ... and 832 more (sorted by multiple of median)
+5. Structural breaks (monthly level shifts > 3x pooled std, >= 4 months each side):
+   paid_awareness               cost         shift at 2025-03: monthly mean 133,376 -> 1,100,600 (z=7.6)
+   website                      demo         shift at 2023-11: monthly mean 1,152 -> 344 (z=5.6)
+   abm                          cost         shift at 2024-02: monthly mean 100,722 -> 415,534 (z=4.6)
+   content                      mqp          shift at 2025-03: monthly mean 584 -> 1,510 (z=4.2)
+   paid_search                  won          shift at 2024-05: monthly mean 70 -> 157 (z=4.2)
+   paid_awareness               clicks       shift at 2025-03: monthly mean 2,753 -> 36,026 (z=3.8)
+   paid_brand_search            sqo          shift at 2024-01: monthly mean 438 -> 787 (z=3.7)
+   paid_awareness               impressions  shift at 2025-03: monthly mean 2,922,906 -> 29,815,040 (z=3.7)
+   paid_brand_search            cost         shift at 2024-09: monthly mean 2,205,582 -> 6,195,780 (z=3.4)
+   paid_sponsorship             mqp          shift at 2025-03: monthly mean 29 -> 357 (z=3.4)
+   paid_brand_search            won          shift at 2024-04: monthly mean 112 -> 264 (z=3.2)
+   listicle_leadbuy_listing     clicks       shift at 2025-02: monthly mean 19,690 -> 11,770 (z=3.2)
+   paid_search                  mqp          shift at 2025-03: monthly mean 2,600 -> 5,206 (z=3.1)
+   customer_braze_communications sqo          shift at 2024-11: monthly mean 12 -> 41 (z=3.0)
